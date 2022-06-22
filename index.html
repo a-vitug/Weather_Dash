@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+     <!-- bootstrap -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    
+     <!-- google fonts -->
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link href="https://fonts.googleapis.com/css2?family=Comfortaa&family=Nanum+Pen+Script&family=Potta+One&display=swap" rel="stylesheet">
+ 
+     <link href="./style.css" rel="stylesheet">
+
+    <title>Weather Dashboard</title>
+</head>
+
+<body>
+
+    <header>
+        <h1 class="title">Weather Dashboard</h1>
+    </header>
+    
+    <main class="container">
+
+        <!-- first row -->
+        <section class="row">
+            <div class="col searchBox">
+                <h3>Enter a city: </h3>
+
+                <div class="input-group mb-3">
+                    <input id="searchInput" type="text" class="form-control search" placeholder="Search here..." aria-label="Search" onfocus="this.value=''">
+                </div>
+
+                <div class="d-grid">
+                    <button id="searchBtn" type="button" class="btn btn-light submitBtn">Submit</button>
+                </div>
+
+                
+            </div>
+
+            <div class="col-8">
+                <h5 id="searchHistory" class="dateHistory"></h5>
+            </div>
+
+
+        </section>
+
+
+        <!-- second row -->
+        <section id="content" class="hidden">
+            <div class="row justify-content-md-center">
+
+                <div class="col todayBoxCont">
+                    <div class="todayBox currentCard">
+                        <h4 id="todayCity"></h4>
+                        <h5 id="currDate"></h5>
+                        <img id="currIcon">
+                        <h6 class="temp">Temperature: <span id="currTemp"></span> °F </h6>
+                        <h6 class="wind">Wind: <span id="currWind"></span> MPH </h6>
+                        <h6 class="humidity">Humidity: <span id="currHumidity"></span> % </h6>
+                        <h6 class="uvtext">UV Index: 
+                            <p id="uvcolor" class="uvcard">
+                                <span id="uv"></span>
+                            </p>
+                        </h6>
+                        
+                    </div>
+                </div>
+
+                <div class="col-md-9 justify-content-md-center weatherBox">
+                    
+                    <h7 class="forecast">Forecast for the next 5 days... </h7>
+                    <div class="row">
+
+                        <div class="col">
+                            <div class="forecastCard dayBox">
+                                <p id="day1" class="date"></p>
+                                <img id="day1Icon">
+                                <p class="temp">Temp: <span id="day1Temp"></span> °F </p>
+                                <p class="wind">Wind: <span id="day1Wind"></span> MPH </p>
+                                <p class="humidity">Humidity: <span id="day1Humidity"></span> % </p>
+                            </div>
+                        </div>
+                        
+                        <div class="col">
+                            <div class="forecastCard dayBox">
+                                <p id="day2" class="date"></p>
+                                <img id="day2Icon">
+                                <p class="temp">Temp: <span id="day2Temp"></span> °F </p>
+                                <p class="wind">Wind: <span id="day2Wind"></span> MPH </p>
+                                <p class="humidity">Humidity: <span id="day2Humidity"></span> % </p>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="forecastCard dayBox">
+                                <p id="day3" class="date"></p>
+                                <img id="day3Icon">
+                                <p class="temp">Temp: <span id="day3Temp"></span> °F </p>
+                                <p class="wind">Wind: <span id="day3Wind"></span> MPH </p>
+                                <p class="humidity">Humidity: <span id="day3Humidity"></span> % </p>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="forecastCard dayBox">
+                                <p id="day4" class="date"></p>
+                                <img id="day4Icon">
+                                <p class="temp">Temp: <span id="day4Temp"></span> °F </p>
+                                <p class="wind">Wind: <span id="day4Wind"></span> MPH </p>
+                                <p class="humidity">Humidity: <span id="day4Humidity"></span> % </p>
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="forecastCard dayBox">
+                                <p id="day5" class="date"></p>
+                                <img id="day5Icon">
+                                <p class="temp">Temp: <span id="day5Temp"></span> °F </p>
+                                <p class="wind">Wind: <span id="day5Wind"></span> MPH </p>
+                                <p class="humidity">Humidity: <span id="day5Humidity"></span> % </p>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!--jquery-->
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/dayjs.min.js"
+        integrity="sha512-0fcCRl828lBlrSCa8QJY51mtNqTcHxabaXVLPgw/jPA5Nutujh6CbTdDgRzl9aSPYW/uuE7c4SffFUQFBAy6lg=="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/plugin/utc.min.js"
+        integrity="sha512-m00bfmYnAl3plEBlQfeQUhw/U2uvmw29V2+jxSWpAjankMWS+zAsjezbKWDEJNXqWq9o9qQZSOiA2RKDpa4D5w=="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.4/plugin/timezone.min.js"
+        integrity="sha512-pslqxxHAYPCxaSeFSmXXxDkLejD5dbFVC66aiVq0z4v7VTJBU+wqcG1OpNh4p3MjS2D6NCwz/H2QmSc7dXxryg=="
+        crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous">
+    </script>
+
+    <!-- vanilla js -->
+    <script src="./script.js"></script>
+
+</body>
+
+</html>

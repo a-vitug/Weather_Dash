@@ -1,0 +1,84 @@
+
+.hidden {
+    display: none;
+}
+
+/*  */
+
+.title {
+    padding: 20px;
+    background-color: #7C99AC;
+    color: #FFEFEF;
+    font-family: 'Potta One', cursive;
+    text-align: center;
+}
+
+.container {
+    margin: 10px;
+    padding: 30px;
+}
+
+.search {
+    padding: 20px;
+}
+
+.submitBtn {
+    float: right;
+}
+
+#todayCity {
+    font-weight: 900;
+    padding: 9px;
+}
+
+button {
+    border: none;
+    background-color: white;
+}
+
+h3,
+.dateHistory,
+.forecast {
+    padding: 5px;
+    font-size: 30px;
+    font-family: 'Nanum Pen Script', cursive;
+    opacity: 0.8;
+}
+
+.dateHistory {
+    text-align: center;
+}
+
+.todayBoxCont {
+    padding-top: 50px;
+}
+
+.todayBox {
+    padding: 10px;
+    text-align: center;
+    font-family: 'Comfortaa', cursive;
+    border: 3px solid #FFEFEF;
+    border-radius: 40px;
+    opacity: 0.8;
+}
+
+.weatherBox {
+    padding: 20px;
+}
+
+.dayBox {
+    padding: 25px;
+    background-color: #FFEFEF;
+    color: #afaca8;
+    font-weight: 900;
+    font-family: 'Comfortaa', cursive;
+    border-radius: 10px;
+}
+
+.date,
+.temp,
+.wind,
+.humidity,
+.uvtext {
+    font-size: 14px;
+}
