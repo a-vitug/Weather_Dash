@@ -1,18 +1,72 @@
-dayjs.extend(window.dayjs_plugin_utc);
-dayjs.extend(window.dayjs_plugin_timezone);
-
-const searchButton = document.getElementById("searchBtn");
-const searchElement = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const searchEl = document.getElementById("searchInput");
 const searchHistoryButton = document.querySelector("#searchHistory");
-
 let searchHistory = [];
+
 const apiUrl = "https://api.openweathermap.org";
 const apiKey = "afe09d5361f7699e655a42a0c502491a";
 
+dayjs.extend(window.dayjs_plugin_utc);
+dayjs.extend(window.dayjs_plugin_timezone);
 
-function drawCurrentCard(city, weather, time) {
+function searchCity(e) {
+    if (!searchEl.value) {
+        return;
+    };
+    e.preventDefault();
 
-    const date = dayjs().tz(time).format("M/D/YYYY");
+    const search = searchEl.value.trim();
+
+    getCoordinates(search);
+
+    searchEl.value = "";
+};
+
+function getCity(cityData) {
+    const lat = cityData.lat;
+    const lon = cityData.lon;
+    const city = cityData.name;
+
+    const url = `${apiUrl}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${apiKey}`;
+
+    fetch(url)
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            todayCast(city, data.current, data.timezone);
+            fiveCast(data.daily, data.timezone);
+        })
+        .catch(function (err) {
+            console.error(err);
+        });
+};
+
+function getCoordinates(searchData) {
+    const url = apiUrl + "/geo/1.0/direct?q=" + searchData + "&limit=5&appid=" + apiKey;
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            if (!data[0]) {
+                alert("Location not found. Please enter a city name.");
+            } else {
+                addHistory(searchData)
+                getCity(data[0]);
+                return;
+            }
+        })
+        .catch(function (err) {
+            console.log("error: " + err);
+        });
+    const content = document.getElementById("content");
+    content.removeAttribute("class", "hidden");
+};
+
+function todayCast(city, weather, time) {
+
+    const date = dayjs().tz(time).format("MMM D YYYY");
     const currentHumidity = document.getElementById("currHumidity");
     const currentWind = document.getElementById("currWind");
     const currentDate = document.getElementById("currDate");
@@ -43,65 +97,7 @@ function drawCurrentCard(city, weather, time) {
     ;
 };
 
-function searchCity(e) {
-    if (!searchElement.value) {
-        return;
-    };
-    e.preventDefault();
-
-    const search = searchElement.value.trim();
-
-    getCoordinates(search);
-
-    searchElement.value = "";
-};
-
-
-function getCityInfo(cityData) {
-    const lat = cityData.lat;
-    const lon = cityData.lon;
-    const city = cityData.name;
-
-    const url = `${apiUrl}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&exclude=minutely,hourly&appid=${apiKey}`;
-
-    fetch(url)
-        .then(function (res) {
-            return res.json();
-        })
-        .then(function (data) {
-            drawCurrentCard(city, data.current, data.timezone);
-            drawFiveDayCard(data.daily, data.timezone);
-        })
-        .catch(function (err) {
-            console.error(err);
-        });
-};
-
-// to show the coordinates of the desired place
-function getCoordinates(search) {
-    const url = apiUrl + "/geo/1.0/direct?q=" + search + "&limit=5&appid=" + apiKey;
-    fetch(url)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            if (!data[0]) {
-                alert("Location not found. Please enter a city name.");
-            } else {
-                addHistory(search)
-                getCityInfo(data[0]);
-                return;
-            }
-        })
-        .catch(function (err) {
-            console.log("error: " + err);
-        });
-    const content = document.getElementById("content");
-    content.removeAttribute("class", "hidden");
-};
-
-// function that shows the 5day forecast from current time
-function drawFiveDayCard(daily, time) {
+function fiveCast(daily, time) {
     const day1 = dayjs().tz(time).add(1, "day").startOf("day").unix();
     const day5 = dayjs().tz(time).add(6, "day").startOf("day").unix();
 
@@ -126,28 +122,7 @@ function drawFiveDayCard(daily, time) {
     };
 };
 
-//function that show the past searched place
-function clickSearchHistory(e) {
-    if (!e.target.matches("button.history")) {
-        return;
-    };
-    const button = e.target;
-    const search = button.getAttribute("data-search");
-    getCoordinates(search);
-};
-
-function addHistory(search) {
-    if (searchHistory.indexOf(search) !== -1) {
-        return;
-    };
-    searchHistory.push(search);
-    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-    historyButtons();
-};
-
-
-
-function historyButtons() {
+function historyEl() {
     const historySection = document.getElementById("searchHistory");
     historySection.innerHTML = "";
     for (let i = searchHistory.length - 1; i >= searchHistory.length - 5; i--) {
@@ -168,17 +143,34 @@ function historyButtons() {
     };
 };
 
+function getHistory(e) {
+    if (!e.target.matches("button.history")) {
+        return;
+    };
+    const button = e.target;
+    const search = button.getAttribute("data-search");
+    getCoordinates(search);
+};
 
-function makeHistory() {
+function addHistory(search) {
+    if (searchHistory.indexOf(search) !== -1) {
+        return;
+    };
+    searchHistory.push(search);
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+    historyEl();
+};
+
+function showHistory() {
     const savedHistory = localStorage.getItem("searchHistory");
 
     if (savedHistory) {
         searchHistory = JSON.parse(savedHistory);
     };
-    historyButtons();
+    historyEl();
 };
 
 
-makeHistory();
-searchButton.onclick = searchCity;
-searchHistoryButton.addEventListener("click", clickSearchHistory);
+showHistory();
+searchBtn.onclick = searchCity;
+searchHistoryButton.addEventListener("click", getHistory);
